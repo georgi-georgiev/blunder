@@ -1,4 +1,4 @@
-module blunder
+module github.com/georgi-georgiev/blunder
 
 go 1.20
 
