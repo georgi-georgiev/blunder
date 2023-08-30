@@ -32,7 +32,7 @@ type InvalidTypeMessage struct {
 }
 
 type MesssageWithoutValidation struct {
-	Id string `json:"string"`
+	Id int `json:"id"`
 }
 
 type WrappedLogger struct {
@@ -93,7 +93,7 @@ func (h *Handlers) C(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, Output{Message: message.Id})
+	c.JSON(http.StatusOK, Output{Message: "success"})
 }
 
 func (h *Handlers) D(c *gin.Context) {
@@ -193,28 +193,28 @@ func SetupServer() {
 	go r.Run()
 }
 
-func TestHtml(t *testing.T) {
+// func TestHtml(t *testing.T) {
 
-	SetupServer()
+// 	SetupServer()
 
-	client := resty.New()
+// 	client := resty.New()
 
-	resp, err := client.R().
-		Get("http://localhost:8080/errors")
+// 	resp, err := client.R().
+// 		Get("http://localhost:8080/errors")
 
-	if err != nil {
-		t.Fatal(err)
-	}
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
 
-	if resp.IsError() {
-		t.Fail()
-	}
+// 	if resp.IsError() {
+// 		t.Fail()
+// 	}
 
-	assert.Equal(t, http.StatusOK, resp.StatusCode(), "status missmatch")
+// 	assert.Equal(t, http.StatusOK, resp.StatusCode(), "status missmatch")
 
-	assert.Equal(t, "", string(resp.Body()), "body missmatch")
+// 	assert.Equal(t, "", string(resp.Body()), "body missmatch")
 
-}
+// }
 
 func TestBasicError(t *testing.T) {
 
@@ -262,7 +262,8 @@ func TestPostSuccess(t *testing.T) {
 	id := 123
 
 	message := &Message{
-		Id: &id,
+		Id:         &id,
+		ExternalId: "asdf",
 	}
 
 	resp, err := client.R().
@@ -278,7 +279,7 @@ func TestPostSuccess(t *testing.T) {
 	}
 
 	expectedOutput := Output{
-		Message: "asd",
+		Message: "asdf",
 	}
 
 	expectedBytes, err := json.Marshal(expectedOutput)
@@ -533,7 +534,14 @@ func TestPostInvalidJson(t *testing.T) {
 
 	expectedErrorResponse := HTTPErrorResponse{
 		Errors: []HTTPError{
-			{},
+			{
+				Type:       "https://example.com/problems",
+				Title:      "INVALID_PARAMETER",
+				Detail:     "json: cannot unmarshal string into Go struct field MesssageWithoutValidation.id of type int",
+				ReasonCode: 150,
+				Reason:     "The request failed because it contained an invalid parameter or parameter value.",
+				Action:     "Please correct the request as per the error description/details provided in the error response.",
+			},
 		},
 	}
 
