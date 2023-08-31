@@ -20,7 +20,7 @@ func (b *Blunder) Add(r *http.Request, err error) {
 	errors = append(errors, err)
 
 	newCtx := context.WithValue(ctx, ctxKey{}, errors)
-	r = r.WithContext(newCtx)
+	_ = r.WithContext(newCtx)
 }
 
 func (b *Blunder) Get(r *http.Request) []error {
@@ -38,10 +38,7 @@ func (b *Blunder) Get(r *http.Request) []error {
 }
 
 func (b *Blunder) GinAdd(c *gin.Context, err error) {
-	ginErr := c.Error(err)
-	if ginErr != nil {
-		panic(ginErr)
-	}
+	_ = c.Error(err)
 }
 
 func (b *Blunder) GinGet(c *gin.Context) []error {
