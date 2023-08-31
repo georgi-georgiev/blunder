@@ -4,11 +4,11 @@
 
 Package `blunder` is an error handling library with readable stack traces and flexible formatting support.
 
-`go get github.com/ggeorgiev/blunder`
+`go get github.com/georgi-georgiev/blunder`
 
 ## Contributing
 
-If you'd like to contribute to `eris`, we'd love your input! Please submit an issue first so we can discuss your proposal.
+If you'd like to contribute to `blunder`, we'd love your input! Please submit an issue first so we can discuss your proposal.
 
 -------------------------------------------------------------------------------
 
