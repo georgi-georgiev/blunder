@@ -6,6 +6,10 @@ Package `blunder` is an error handling library with readable stack traces and fl
 
 `go get github.com/georgi-georgiev/blunder`
 
+## Swagger
+
+When you use swagger you need to add `--parseVendor` becuase searching in `vendor` folder is disabled by default e.g. `swag init --parseVendor`
+
 ## Contributing
 
 If you'd like to contribute to `blunder`, we'd love your input! Please submit an issue first so we can discuss your proposal.
