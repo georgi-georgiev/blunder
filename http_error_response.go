@@ -97,6 +97,10 @@ func NotFound() HTTPErrorResponse {
 	return NewHTTPErrorResponse(http.StatusNotFound, "The requested operation failed because a resource associated with the request could not be found.")
 }
 
+func Unauthorized() HTTPErrorResponse {
+	return NewHTTPErrorResponse(http.StatusUnauthorized, "The user does not have valid authentication credentials for the target resource.")
+}
+
 func Forbidden() HTTPErrorResponse {
 	return NewHTTPErrorResponse(http.StatusForbidden, "The requested operation is forbidden and cannot be completed.")
 }
