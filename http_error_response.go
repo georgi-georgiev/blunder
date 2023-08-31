@@ -97,6 +97,10 @@ func NotFound() HTTPErrorResponse {
 	return NewHTTPErrorResponse(http.StatusNotFound, "The requested operation failed because a resource associated with the request could not be found.")
 }
 
+func Forbidden() HTTPErrorResponse {
+	return NewHTTPErrorResponse(http.StatusForbidden, "The requested operation is forbidden and cannot be completed.")
+}
+
 func InternalServerError() HTTPErrorResponse {
 	return NewHTTPErrorResponse(http.StatusInternalServerError, "The request failed due to an internal error.")
 }
