@@ -38,7 +38,10 @@ func (b *Blunder) Get(r *http.Request) []error {
 }
 
 func (b *Blunder) GinAdd(c *gin.Context, err error) {
-	c.Error(err)
+	ginErr := c.Error(err)
+	if ginErr != nil {
+		panic(ginErr)
+	}
 }
 
 func (b *Blunder) GinGet(c *gin.Context) []error {

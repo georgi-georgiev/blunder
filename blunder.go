@@ -32,16 +32,23 @@ func New() *Blunder {
 	trans, _ := uni.GetTranslator("en")
 
 	val := validator.New()
-	en_translations.RegisterDefaultTranslations(val, trans)
+	err := en_translations.RegisterDefaultTranslations(val, trans)
+	if err != nil {
+		panic(err)
+	}
 
 	//override
-	val.RegisterTranslation("required", trans, func(ut ut.Translator) error {
+	err = val.RegisterTranslation("required", trans, func(ut ut.Translator) error {
 		return ut.Add("required", "{0} must have a value!", true)
 	}, func(ut ut.Translator, fe validator.FieldError) string {
 		t, _ := ut.T(fe.Tag(), fe.Field())
 
 		return t
 	})
+
+	if err != nil {
+		panic(err)
+	}
 
 	return &Blunder{
 		valildator:  val,

@@ -24,7 +24,10 @@ func (b *Blunder) ErrorHandler(logger Logger) Middleware {
 			if ok {
 				w.Header().Set("Content-Type", "application/problem+json")
 				w.WriteHeader(statusCode)
-				w.Write(response.ToJson())
+				_, err := w.Write(response.ToJson())
+				if err != nil {
+					panic(err)
+				}
 			}
 		}
 	}

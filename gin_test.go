@@ -16,6 +16,7 @@ import (
 	"github.com/rotisserie/eris"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
+	"golang.org/x/sync/errgroup"
 )
 
 type Message struct {
@@ -158,15 +159,21 @@ func SetupServer() {
 
 	blunder := NewRFC()
 
-	blunder.RegisterCustomValidation("isNumber", validateIsNumber)
+	err := blunder.RegisterCustomValidation("isNumber", validateIsNumber)
+	if err != nil {
+		panic(err)
+	}
 
 	trans, _ := blunder.uni.GetTranslator("en")
-	blunder.RegisterCustomTranslation("isNumber", trans, func(ut ut.Translator) error {
+	err = blunder.RegisterCustomTranslation("isNumber", trans, func(ut ut.Translator) error {
 		return ut.Add("isNumber", "{0} must be a number", true)
 	}, func(ut ut.Translator, fe validator.FieldError) string {
 		t, _ := ut.T(fe.Tag(), fe.Field())
 		return t
 	})
+	if err != nil {
+		panic(err)
+	}
 
 	recordNotFoundErr := RecordNotFoundError{}
 
@@ -190,7 +197,11 @@ func SetupServer() {
 	r.GET("/e", handlers.E)
 	r.GET("/f", handlers.F)
 
-	go r.Run()
+	errs, _ := errgroup.WithContext(context.Background())
+
+	errs.Go(func() error {
+		return r.Run()
+	})
 }
 
 // func TestHtml(t *testing.T) {
