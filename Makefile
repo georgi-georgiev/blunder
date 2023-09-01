@@ -32,6 +32,10 @@ build:
 	@echo Building
 	@go build -v .
 
+## Install
+install: deps
+	$(GOINSTALL) ./cmd/blunder
+
 ## Format with go-fmt
 fmt:
 	@echo Formatting

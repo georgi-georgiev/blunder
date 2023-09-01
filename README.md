@@ -6,6 +6,12 @@ Package `blunder` is an error handling library with readable stack traces and fl
 
 `go get github.com/georgi-georgiev/blunder`
 
+## Install
+
+`go install github.com/georgi-georgiev/blunder/cmd/blunder@latest`
+
+Run `blunder gen` in the project's root folder which contains the `main.go` file. This will parse your comments and generate the required files `blunder.html`.
+
 ## Swagger
 
 When you use swagger you need to add `--parseVendor` becuase searching in `vendor` folder is disabled by default e.g. `swag init --parseVendor`
