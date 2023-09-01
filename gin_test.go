@@ -36,18 +36,6 @@ type MesssageWithoutValidation struct {
 	Id int `json:"id"`
 }
 
-type WrappedLogger struct {
-	zap *zap.Logger
-}
-
-func (l WrappedLogger) Error(err error) {
-	l.zap.Error(err.Error())
-}
-
-func NewWrappedLogger(zap *zap.Logger) WrappedLogger {
-	return WrappedLogger{zap: zap}
-}
-
 type Handlers struct {
 	blunder *Blunder
 }
@@ -155,8 +143,6 @@ func validateIsNumber(fl validator.FieldLevel) bool {
 
 func SetupServer() {
 	logger, _ := zap.NewProduction()
-	wrappedLogger := NewWrappedLogger(logger)
-
 	blunder := NewRFC()
 
 	err := blunder.RegisterCustomValidation("isNumber", validateIsNumber)
@@ -183,7 +169,7 @@ func SetupServer() {
 
 	r := gin.Default()
 	r.Use(gin.CustomRecovery(blunder.GinRecovery))
-	r.Use(blunder.GinErrorHandler(wrappedLogger))
+	r.Use(blunder.GinErrorHandler(logger))
 	r.NoMethod(blunder.GinNoMethod)
 	r.NoRoute(blunder.GinNoRoute)
 

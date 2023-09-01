@@ -4,11 +4,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type Middleware func(http.HandlerFunc) http.HandlerFunc
 
-func (b *Blunder) ErrorHandler(logger Logger) Middleware {
+func (b *Blunder) ErrorHandler(logger *zap.Logger) Middleware {
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			next(w, r)
@@ -16,7 +17,7 @@ func (b *Blunder) ErrorHandler(logger Logger) Middleware {
 			errors := b.Get(r)
 
 			for _, err := range errors {
-				logger.Error(err)
+				logger.Error(err.Error())
 				errors = append(errors, err)
 			}
 
@@ -33,14 +34,14 @@ func (b *Blunder) ErrorHandler(logger Logger) Middleware {
 	}
 }
 
-func (b *Blunder) GinErrorHandler(logger Logger) gin.HandlerFunc {
+func (b *Blunder) GinErrorHandler(logger *zap.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
 		var errors []error
 
 		for _, err := range c.Errors {
-			logger.Error(err.Err)
+			logger.Error(err.Error())
 			errors = append(errors, err.Err)
 		}
 
