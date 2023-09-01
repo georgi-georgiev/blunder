@@ -1,22 +1,31 @@
-package blunder
+package gen
 
 import (
 	"html/template"
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/georgi-georgiev/blunder"
+	"github.com/spf13/cobra"
 )
 
-func Generate() {
-	var tmplFile = "blunder.tmpl"
-	tmpl, err := template.New(tmplFile).ParseFiles(tmplFile)
+var CmdGen = &cobra.Command{
+	Use:   "run",
+	Short: "Run project",
+	Long:  "Run project. Example: kratos run",
+	Run:   Gen,
+}
+
+func Gen(cmd *cobra.Command, args []string) {
+	tmpl, err := template.New("blunder.tmpl").ParseFiles("blunder.tmpl")
 	if err != nil {
 		panic(err)
 	}
 
-	errorCodes := make([]ErrorCode, 0)
-	for reasonCode, reason := range Reasons {
-		errorCodes = append(errorCodes, ErrorCode{
+	errorCodes := make([]blunder.ErrorCode, 0)
+	for reasonCode, reason := range blunder.Reasons {
+		errorCodes = append(errorCodes, blunder.ErrorCode{
 			Status:      strconv.Itoa(reason.ReasonGroup.Status) + " " + http.StatusText(reason.ReasonGroup.Status),
 			Title:       reason.ReasonGroup.Title,
 			Description: reason.ReasonGroup.Description,

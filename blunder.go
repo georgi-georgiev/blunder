@@ -24,8 +24,6 @@ type Blunder struct {
 
 func New() *Blunder {
 
-	Generate()
-
 	//default en
 	en := en.New()
 	uni := ut.New(en, en)

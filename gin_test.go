@@ -190,28 +190,27 @@ func SetupServer() {
 	})
 }
 
-// func TestHtml(t *testing.T) {
+func TestHtml(t *testing.T) {
 
-// 	SetupServer()
+	SetupServer()
 
-// 	client := resty.New()
+	client := resty.New()
 
-// 	resp, err := client.R().
-// 		Get("http://localhost:8080/errors")
+	resp, err := client.R().
+		Get("http://localhost:8080/errors")
 
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
+	if err != nil {
+		t.Fatal(err)
+	}
 
-// 	if resp.IsError() {
-// 		t.Fail()
-// 	}
+	if resp.IsError() {
+		t.Fail()
+	}
 
-// 	assert.Equal(t, http.StatusOK, resp.StatusCode(), "status missmatch")
+	assert.Equal(t, http.StatusOK, resp.StatusCode(), "status missmatch")
 
-// 	assert.Equal(t, "", string(resp.Body()), "body missmatch")
-
-// }
+	assert.Contains(t, "blunder", string(resp.Body()), "body missmatch")
+}
 
 func TestBasicError(t *testing.T) {
 
